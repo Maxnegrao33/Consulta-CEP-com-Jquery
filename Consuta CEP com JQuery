@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta author="Maciel Oliveira">
+    <title>Bootstrap demo</title>
+    <!---->>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+            crossorigin="anonymous">
+
+  </head>
+
+  <body>
+    <div class="container mt-5">
+        <form id="cepForm" class="mb-3">
+            <div class="mb-3">
+                <label for="cepInput" class="form-label">CEP</label>
+                <input type="text" class="form-control" id="cepInput" maxlength="8" required>
+            </div>
+                <button type="button" id="consultaCEP" class="btn btn-primary">Consultar</button>
+        </form>
+
+        <div id="resultado" style="display: none;">
+            <h2>Resultados</h2>
+            <p id="logradouro"></p>
+            <p id="cidade"></p>
+        </div>    
+    </div>
+            
+    </div>
+    <!--Chamando o CDN do JQuery-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+            crossorigin="anonymous">
+    </script>
+
+    <!--Chamando o CDN do Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+            crossorigin="anonymous">
+    </script>
+
+    <!--Chamando o código dentro do Ajax-->
+    <script>
+        //Aguardar os elementos carregarem
+        $(document).ready(function(){
+            //Captura o click do botão
+            $('#consultaCEP').click(function(){
+                let cep = $("cepInput").val().replace(/\D/g,'')
+                if(cep != "")
+                {
+                    let url = `https://viacep.com.br/ws/$(cep)/json/`
+                    
+                    //Inicia requisição AJAX
+                $.ajax({
+                    url:url,
+                    type:'GET', //Requisição GET ou POST
+                    dataType:'json', //Tipo de Retorno
+                    cache:'true',
+                    success:function(data)
+                    {
+                        //Exibe DIV Resultado
+                        $("#resultado").show()
+
+                        //Preenche os campos
+                        $("#logradouro").text(`logra:$(data.logradouro)`)
+                        $("#cidade").text(`Cidade:$(data.localidade)`)
+                    },
+                    error: function(){
+                        alert("Erro na Requisição")
+                    }
+
+                    }
+                })
+            }
+        })
+    
+    </script>
+  </body>
+</html>
